@@ -12,13 +12,13 @@ import java.util.Date;
 
 @Entity
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-public class Wallet {
+public class Operation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private double operationAmount;
+    private double value;
     @Enumerated(EnumType.STRING)
-    private OperationType operationType;
+    private OperationType type;
     private double balance;
     private String category;
     @CreationTimestamp

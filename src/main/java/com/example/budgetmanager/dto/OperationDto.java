@@ -5,8 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter @Setter @NoArgsConstructor
-public class WalletDto {
-    private double operationAmount;
+public class OperationDto {
+    private double value;
     private OperationType operationType;
     private String category;
 }

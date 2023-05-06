@@ -1,7 +1,6 @@
 package com.example.budgetmanager.controller;
 
-import com.example.budgetmanager.dto.OperationType;
-import com.example.budgetmanager.dto.WalletDto;
+import com.example.budgetmanager.dto.OperationDto;
 import com.example.budgetmanager.service.WalletService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -15,20 +14,20 @@ public class WalletController {
     private final WalletService walletService;
     @GetMapping("/")
     String wallet(Model model){
-        model.addAttribute("wallet", new WalletDto());
+        model.addAttribute("wallet", new OperationDto());
         return "wallet";
     }
 
     @PostMapping("/addIncome")
     String addIncome(){
-        WalletDto walletDto = new WalletDto();
+        OperationDto walletDto = new OperationDto();
         walletService.addIncome(walletDto);
         return "redirect:";
     }
 
     @PostMapping("/addOutcome")
     String addOutcome(){
-        WalletDto walletDto = new WalletDto();
+        OperationDto walletDto = new OperationDto();
         walletService.addOutcome(walletDto);
         return "redirect:";
     }
