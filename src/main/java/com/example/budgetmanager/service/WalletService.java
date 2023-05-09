@@ -9,23 +9,30 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class WalletService {
     private final WalletRepository walletRepository;
     private final OperationDtoMapper operationDtoMapper;
 
-    @Transactional
     public void addIncome(OperationDto walletDto){
         walletDto.setOperationType(OperationType.INCOME);
         Operation operation = operationDtoMapper.map(walletDto);
         walletRepository.save(operation);
     }
 
-    @Transactional
     public void addOutcome(OperationDto walletDto){
         walletDto.setOperationType(OperationType.OUTCOME);
         Operation operation = operationDtoMapper.map(walletDto);
         walletRepository.save(operation);
+    }
+
+    public List<OperationDto> getAllOperations(){
+        List<Operation> operations = walletRepository.findAll();
+        operations.stream().map(OperationDtoMapper::map).collect(Collectors.toList())
+
     }
 }

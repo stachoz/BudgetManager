@@ -16,6 +16,7 @@ public class OperationDtoMapper {
         operation.setValue(operationAmount);
         operation.setType(operationType);
         // avoid lambdas have to be final or effectively final error
+        // event sourcing
         double negativeOperationAmount;
         if(operationType.equals(OperationType.OUTCOME)) {
             negativeOperationAmount = -operationAmount;
