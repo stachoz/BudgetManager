@@ -60,7 +60,7 @@
                             <th scope="col" th:text="*{operationType}"></th>
                             <th scope="col" th:text="*{category}"></th>
                             <th scope="col" th:text="*{balance}"></th>
-                            <th scope="col" th:text="*{date}"></th>
+                            <th scope="col" th:text="${#dates.format(operation.date, 'dd-MM-yyyy HH:mm')}"></th>
 
                         </tr>
                     </tbody>
