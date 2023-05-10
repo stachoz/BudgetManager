@@ -7,7 +7,11 @@ import com.example.budgetmanager.service.WalletService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/wallet")
@@ -18,6 +22,8 @@ public class WalletController {
     String wallet(Model model){
         IncomeSource[] incomeSources = IncomeSource.values();
         OutcomeCategory[] outcomeCategories = OutcomeCategory.values();
+        List<OperationDto> allOperations = walletService.getAllOperations();
+        model.addAttribute("operations", allOperations);
         model.addAttribute("incomeSources", incomeSources);
         model.addAttribute("outcomeCategories", outcomeCategories);
         model.addAttribute("operation", new OperationDto());
@@ -25,16 +31,14 @@ public class WalletController {
     }
 
     @PostMapping("/addIncome")
-    String addIncome(){
-        OperationDto operationDto = new OperationDto();
-        walletService.addIncome(operationDto);
+    String addIncome(OperationDto dto){
+        walletService.addIncome(dto);
         return "redirect:";
     }
 
     @PostMapping("/addOutcome")
-    String addOutcome(){
-        OperationDto operationDto = new OperationDto();
-        walletService.addOutcome(operationDto);
+    String addOutcome(OperationDto dto){
+        walletService.addOutcome(dto);
         return "redirect:";
     }
 

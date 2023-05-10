@@ -24,7 +24,7 @@
                     <button type="submit" class="btn btn-success">Submit</button>
                 </form>
                 <h2>Outcome</h2>
-                <form method="post" th:action="@{addIncome}" th:object="${operation}">
+                <form method="post" th:action="@{addOutcome}" th:object="${operation}">
                     <div class="mb-3">
                         <label for="transaction-type-select" class="form-label">Select type</label>
                         <select th:field="*{category}" class="form-select" aria-label="Default select example" id="transaction-type-select">
@@ -53,7 +53,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr></tr>
+                        <tr th:each="operation, counter : ${operations}" th:object="${operation}"
+                            th:attr="class=*{operationType.equals(operationType.INCOME)} ? 'table-success' : 'table-danger'">
+                            <th scope="col" th:text="${counter.count}"></th>
+                            <th scope="col" th:text="*{value}"></th>
+                            <th scope="col" th:text="*{operationType}"></th>
+                            <th scope="col" th:text="*{category}"></th>
+                            <th scope="col" th:text="*{balance}"></th>
+                            <th scope="col" th:text="*{date}"></th>
+
+                        </tr>
                     </tbody>
                 </table>
             </div>
