@@ -1,7 +1,7 @@
 package com.example.budgetmanager.dto;
 
 import com.example.budgetmanager.model.Operation;
-import com.example.budgetmanager.repo.WalletRepository;
+import com.example.budgetmanager.repo.OperationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class OperationDtoMapper {
-    private final WalletRepository walletRepository;
+    private final OperationRepository operationRepository;
     public Operation map(OperationDto dto){
         Operation operation = new Operation();
         double value = dto.getValue();
@@ -35,7 +35,7 @@ public class OperationDtoMapper {
     private double countBalance(double value, OperationType t){
         double lastBalance = 0;
         double updatedBalance = 0;
-        Optional<Operation> lastOperation = walletRepository.findTopByOrderByIdDesc();
+        Optional<Operation> lastOperation = operationRepository.findTopByOrderByIdDesc();
         if(lastOperation.isPresent()){
             lastBalance = lastOperation.get().getBalance();
         }
