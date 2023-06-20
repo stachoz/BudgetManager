@@ -3,6 +3,7 @@ package com.example.budgetmanager.service;
 import com.example.budgetmanager.dto.OperationDto;
 import com.example.budgetmanager.dto.OperationDtoMapper;
 import com.example.budgetmanager.dto.OperationType;
+import com.example.budgetmanager.dto.StatisticsDto;
 import com.example.budgetmanager.dto.forms.HistoryPeriodOption;
 import com.example.budgetmanager.model.Operation;
 import com.example.budgetmanager.repo.OperationRepository;
@@ -31,17 +32,28 @@ public class WalletService {
         operationRepository.save(operation);
     }
 
-    public List<OperationDto> getAllOperations(){
-        return operationRepository.getAllOperationsDesc().stream().map(operationDtoMapper::map)
+    public List<OperationDto> getOperationsFromDate(HistoryPeriodOption periodOption) {
+        LocalDate filterDate = getFilterDate(periodOption);
+        return operationRepository.getOperationFromDate(filterDate).stream()
+                .map(operationDtoMapper::map)
                 .collect(Collectors.toList());
     }
-    public List<OperationDto> getOperationsFromDate(HistoryPeriodOption periodOption) {
+    public StatisticsDto getWalletStatistics(HistoryPeriodOption periodOption){
+        LocalDate filterDate = getFilterDate(periodOption);
+
+        int outcomeTransactionNumber = operationRepository.countOperations(filterDate, String.valueOf(OperationType.OUTCOME));
+        int incomeTransactionNumber = operationRepository.countOperations(filterDate, String.valueOf(OperationType.INCOME));
+        double incomeTransactionValue = operationRepository.operationValue(filterDate, String.valueOf(OperationType.INCOME));
+        double outcomeTransactionValue = operationRepository.operationValue(filterDate, String.valueOf(OperationType.OUTCOME));
+
+        return new StatisticsDto(outcomeTransactionNumber, incomeTransactionNumber, outcomeTransactionValue, incomeTransactionValue);
+    }
+
+    private LocalDate getFilterDate(HistoryPeriodOption periodOption){
         LocalDate now = LocalDate.now();
         LocalDate filterDate = null;
         switch (periodOption){
-            case ALL -> {
-                return getAllOperations();
-            }
+            case ALL -> filterDate = now.minusYears(1);
             case TODAY -> filterDate = now;
             case THIS_MONTH -> {
                 int dayOfMonth = now.getDayOfMonth() - 1;
@@ -56,8 +68,7 @@ public class WalletService {
                 filterDate = now.minusDays(dayOfMonth).minusMonths(1);
             }
         }
-        return operationRepository.getOperationFromDate(filterDate).stream()
-                .map(operationDtoMapper::map)
-                .collect(Collectors.toList());
+        return filterDate;
     }
+
 }

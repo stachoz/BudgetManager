@@ -7,11 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
-@Entity
+@Entity(name = "Operation")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class Operation {
     @Id

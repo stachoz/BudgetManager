@@ -3,6 +3,7 @@ package com.example.budgetmanager.controller;
 import com.example.budgetmanager.dto.IncomeSource;
 import com.example.budgetmanager.dto.OperationDto;
 import com.example.budgetmanager.dto.OutcomeCategory;
+import com.example.budgetmanager.dto.StatisticsDto;
 import com.example.budgetmanager.dto.forms.HistoryPeriodOption;
 import com.example.budgetmanager.service.WalletService;
 import lombok.RequiredArgsConstructor;
@@ -23,11 +24,13 @@ public class WalletController {
     @GetMapping("")
     String wallet(@RequestParam(required = false, name = "period") HistoryPeriodOption periodOption, Model model){
         List<OperationDto> operations;
-
+        StatisticsDto walletStats;
         if (periodOption == null){
             operations = walletService.getOperationsFromDate(HistoryPeriodOption.ALL);
+            walletStats = walletService.getWalletStatistics(HistoryPeriodOption.ALL);
         } else {
             operations = walletService.getOperationsFromDate(periodOption);
+            walletStats = walletService.getWalletStatistics(periodOption);
         }
 
         model.addAttribute("operations", operations);
@@ -35,6 +38,7 @@ public class WalletController {
         model.addAttribute("incomeSources", IncomeSource.values());
         model.addAttribute("outcomeCategories", OutcomeCategory.values());
         model.addAttribute("operation", new OperationDto());
+        model.addAttribute("stats", walletStats);
         return "wallet";
     }
 
