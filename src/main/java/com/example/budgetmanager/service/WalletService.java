@@ -1,15 +1,17 @@
 package com.example.budgetmanager.service;
 
-import com.example.budgetmanager.dto.OperationType;
 import com.example.budgetmanager.dto.OperationDto;
 import com.example.budgetmanager.dto.OperationDtoMapper;
+import com.example.budgetmanager.dto.OperationType;
+import com.example.budgetmanager.dto.forms.HistoryPeriodOption;
 import com.example.budgetmanager.model.Operation;
 import com.example.budgetmanager.repo.OperationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,9 +32,32 @@ public class WalletService {
     }
 
     public List<OperationDto> getAllOperations(){
-        List<OperationDto> dtos = new ArrayList<>();
-        operationRepository.getAllOperationsDesc().forEach(o -> dtos.add(operationDtoMapper.map(o)));
-        return dtos;
+        return operationRepository.getAllOperationsDesc().stream().map(operationDtoMapper::map)
+                .collect(Collectors.toList());
     }
-
+    public List<OperationDto> getOperationsFromDate(HistoryPeriodOption periodOption) {
+        LocalDate now = LocalDate.now();
+        LocalDate filterDate = null;
+        switch (periodOption){
+            case ALL -> {
+                return getAllOperations();
+            }
+            case TODAY -> filterDate = now;
+            case THIS_MONTH -> {
+                int dayOfMonth = now.getDayOfMonth() - 1;
+                filterDate = now.minusDays(dayOfMonth);
+            }
+            case THIS_WEEK -> {
+                int dayOfWeek = now.getDayOfWeek().getValue() - 1;
+                filterDate = now.minusDays(dayOfWeek);
+            }
+            case LAST_MONTH ->  {
+                int dayOfMonth = now.getDayOfMonth() - 1;
+                filterDate = now.minusDays(dayOfMonth).minusMonths(1);
+            }
+        }
+        return operationRepository.getOperationFromDate(filterDate).stream()
+                .map(operationDtoMapper::map)
+                .collect(Collectors.toList());
+    }
 }
