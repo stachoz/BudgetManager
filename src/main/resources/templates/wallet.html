@@ -25,7 +25,7 @@
                     <button type="submit" class="btn btn-success">Submit</button>
                 </form>
                 <h2>Outcome</h2>
-                <form method="post" th:action="@{wallet/addOutcome}" th:object="${operation}">
+                <form method="post" th:action="@{/wallet/addOutcome}" th:object="${operation}">
                     <div class="mb-3">
                         <label for="transaction-type-select" class="form-label">Select type</label>
                         <select th:field="*{category}" class="form-select" aria-label="Default select example" id="transaction-type-select">
