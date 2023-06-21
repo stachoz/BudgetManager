@@ -12,7 +12,7 @@ public interface OperationRepository extends JpaRepository<Operation, Long> {
     Optional<Operation> findTopByOrderByIdDesc();
     @Query(value = "select * from operation order by id desc",nativeQuery = true)
     List<Operation> getAllOperationsDesc();
-    @Query(value ="select * from operation where date > :dateTime", nativeQuery = true)
+    @Query(value ="select * from operation where date > :dateTime order by id desc", nativeQuery = true)
     List<Operation> getOperationFromDate(LocalDate dateTime);
 
     @Query(value = "select count(id) from operation where date > :dateTime and type = :type",nativeQuery = true)

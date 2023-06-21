@@ -21,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WalletController {
     private final WalletService walletService;
-    @GetMapping("")
+    @GetMapping("/")
     String wallet(@RequestParam(required = false, name = "period") HistoryPeriodOption periodOption, Model model){
         List<OperationDto> operations;
         StatisticsDto walletStats;
