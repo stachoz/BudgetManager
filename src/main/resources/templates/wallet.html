@@ -49,9 +49,11 @@
 
             </div>
             <div class="col">
-                <h2>History</h2>
-                <table class="table">
-                    <thead>
+                <h2 th:text="${param.period} + ' History'" th:if="${param.period} != null">History</h2>
+                <h2 th:if="${param.period} == null">History</h2>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">value</th>
@@ -71,19 +73,20 @@
                                 </div>
                             </th>
                         </tr>
-                    </thead>
-                    <tbody>
+                        </thead>
+                        <tbody>
                         <tr th:each="operation, counter : ${operations}" th:object="${operation}"
                             th:attr="class=*{operationType.equals(operationType.INCOME)} ? 'table-success' : 'table-danger'">
                             <th scope="col" th:text="${counter.count}"></th>
-                            <th scope="col" th:text="*{value}"></th>
+                            <th scope="col" th:text="*{#numbers.formatDecimal(value, 0, 2)}"></th>
                             <th scope="col" th:text="*{operationType}"></th>
                             <th scope="col" th:text="*{category}"></th>
-                            <th scope="col" th:text="*{balance}"></th>
+                            <th scope="col" th:text="*{#numbers.formatDecimal(balance, 0, 2)}"></th>
                             <th scope="col" th:text="${#dates.format(operation.date, 'dd-MM-yyyy HH:mm')}"></th>
                         </tr>
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
